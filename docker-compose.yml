@@ -56,6 +56,25 @@ services:
       - stock-screener-network
     restart: unless-stopped
 
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+      - REACT_APP_NAME=Stock Screening Dashboard
+    depends_on:
+      - api
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    networks:
+      - stock-screener-network
+    restart: unless-stopped
+
   # Nginx reverse proxy (optional)
   nginx:
     image: nginx:alpine
